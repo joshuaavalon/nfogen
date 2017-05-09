@@ -1,4 +1,7 @@
 # Nfo Gen
+[![Release](https://img.shields.io/github/release/joshuaavalon/nfogen.svg?style=flat-square&colorB=brightgreen)](https://github.com/joshuaavalon/nfogen/releases)
+[![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/joshuaavalon/nfogen/blob/master/LICENSE)
+
 Nfo Gen is a script to generate nfo file(s). It is designed to be used by plex agent [XBMCnfoTVImporter](https://github.com/gboudreau/XBMCnfoTVImporter.bundle).
 
 ## Usage
