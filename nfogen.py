@@ -36,7 +36,7 @@ def main():
         index = episode_num - args.start_episode  # type: int
         aired = start_date + timedelta(days=args.increment * index)  # type: date
         root = generate_xml(episode_num=episode_num, aired=aired, directors=args.directors,
-                            writers=args.writers)  # type: Element
+                            writers=args.writers, mpaa=args.mpaa)  # type: Element
         file_name = "{0} - s{1:02d}e{2:02d}.nfo".format(args.name, args.season, episode_num)  # type: str
         tree = ElementTree(element=root)  # type: ElementTree
         tree.write(file_name, encoding="utf-8", short_empty_elements=False)
@@ -48,12 +48,14 @@ def parse_args():
     parser.add_argument("name", type=str)
     parser.add_argument("-s", "--season", type=int, default=1, metavar="<season number>",
                         help="Season number of the nfo(s) (default: %(default)s)")
+    parser.add_argument("-D", "--date", type=valid_date, default=date.today(), metavar="<start date>",
+                        help="Start date of the nfo file(s) (default: %(default)s)")
+    parser.add_argument("-m", "--mpaa", type=str, default="", metavar="<mpaa>",
+                        help="Common mpaa of all the generate nfo(s)")
     parser.add_argument("-d", "--directors", type=str, nargs="+", metavar="<director(s) name>",
                         help="Common director(s) of all the generate nfo(s)")
     parser.add_argument("-w", "--writers", type=str, nargs="+", metavar="<writer(s) name>",
                         help="Common writer(s) of all the generate nfo(s)")
-    parser.add_argument("-D", "--date", type=valid_date, default=date.today(), metavar="<start date>",
-                        help="Start date of the nfo file(s) (default: %(default)s)")
     parser.add_argument("-i", "--increment", type=int, default=7, metavar="<number of day(s)>",
                         help="Number of day(s) between each episode (default: %(default)s)")
     parser.add_argument("-S", "--start_episode", type=int, default=1, metavar="<start episode>",
@@ -64,8 +66,7 @@ def parse_args():
     return parser.parse_args()
 
 
-def generate_xml(episode_num: int = 1, aired: date = date.today(), directors: List[str] = None,
-                 writers: List[str] = None) -> Element:
+def generate_xml(episode_num: int, aired: date, directors: List[str], writers: List[str], mpaa: str) -> Element:
     if writers is None:
         writers = []
     if directors is None:
@@ -74,7 +75,7 @@ def generate_xml(episode_num: int = 1, aired: date = date.today(), directors: Li
     SubElement(root, "title").text = ""
     SubElement(root, "episode").text = str(episode_num)
     SubElement(root, "aired").text = aired.strftime("%Y-%m-%d")
-    SubElement(root, "mpaa").text = ""
+    SubElement(root, "mpaa").text = mpaa
     SubElement(root, "plot").text = ""
     SubElement(root, "director").text = "/".join(directors)
     SubElement(root, "credits").text = "/".join(writers)
