@@ -5,6 +5,8 @@ from xml import etree
 from xml.etree.ElementTree import Element, SubElement, ElementTree, Comment, ProcessingInstruction, _escape_cdata, \
     _escape_attrib, QName
 
+from os import path
+
 """
 Only print metavar once
 """
@@ -23,8 +25,14 @@ def valid_date(date_str: str):
     try:
         return datetime.strptime(date_str, "%Y-%m-%d")
     except ValueError:
-        msg = "Not a valid date: {0}.".format(date_str)
+        msg = "Not a valid date: {0}".format(date_str)
         raise argparse.ArgumentTypeError(msg)
+
+
+def valid_dir(path_str: str):
+    if path_str == "" or path.isdir(path_str):
+        return path_str
+    raise TypeError("{0} is not a directory".format(path_str))
 
 
 def main():
@@ -39,13 +47,15 @@ def main():
                             writers=args.writers, mpaa=args.mpaa)  # type: Element
         file_name = "{0} - s{1:02d}e{2:02d}.nfo".format(args.name, args.season, episode_num)  # type: str
         tree = ElementTree(element=root)  # type: ElementTree
-        tree.write(file_name, encoding="utf-8", short_empty_elements=False)
+        tree.write(path.join(args.output, file_name), encoding="utf-8", short_empty_elements=False)
 
 
 def parse_args():
     parser = argparse.ArgumentParser(prog="Nfo Gen", description="Nfo Gen is a script to generate nfo file(s).",
                                      formatter_class=HelpFormatter)
     parser.add_argument("name", type=str)
+    parser.add_argument("-o", "--output", type=valid_dir, default="", metavar="<output directory>",
+                        help="Output directory of the nfo(s) (default: current)")
     parser.add_argument("-s", "--season", type=int, default=1, metavar="<season number>",
                         help="Season number of the nfo(s) (default: %(default)s)")
     parser.add_argument("-D", "--date", type=valid_date, default=date.today(), metavar="<start date>",
@@ -62,7 +72,7 @@ def parse_args():
                         help="Episode number of the start (inclusive) (default: %(default)s)")
     parser.add_argument("-E", "--end_episode", type=int, default=12, metavar="<end episode>",
                         help="Episode number of the end (inclusive) (default: %(default)s)")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.1")
     return parser.parse_args()
 
 
