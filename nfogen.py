@@ -94,7 +94,7 @@ def parse_template_str(template: str, index: int, episode_num: int, aired: date,
     result = template  # type: str
     result = result.replace("%INDEX%", str(index))
     result = result.replace("%EPISODE%", str(episode_num))
-    result = result.replace("%DATE%", str(aired))
+    result = result.replace("%DATE%", str(aired.strftime("%Y-%m-%d")))
     return result
 
 
