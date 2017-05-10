@@ -1,11 +1,9 @@
 import argparse
 from datetime import datetime, date, timedelta
-from typing import List
+from os import path
 from xml import etree
 from xml.etree.ElementTree import Element, SubElement, ElementTree, Comment, ProcessingInstruction, _escape_cdata, \
     _escape_attrib, QName
-
-from os import path
 
 """
 Only print metavar once
@@ -40,11 +38,9 @@ def main():
     if args.start_episode > args.end_episode:
         raise ValueError("Start episode number cannot be greater than end episode number")
     start_date = args.date  # type: date
-    for episode_num in range(args.start_episode, args.end_episode + 1):
-        index = episode_num - args.start_episode  # type: int
+    for index, episode_num in enumerate(range(args.start_episode, args.end_episode + 1)):
         aired = start_date + timedelta(days=args.increment * index)  # type: date
-        root = generate_xml(episode_num=episode_num, aired=aired, directors=args.directors,
-                            writers=args.writers, mpaa=args.mpaa)  # type: Element
+        root = generate_xml(index=index, episode_num=episode_num, aired=aired, args=args)  # type: Element
         file_name = "{0} - s{1:02d}e{2:02d}.nfo".format(args.name, args.season, episode_num)  # type: str
         tree = ElementTree(element=root)  # type: ElementTree
         tree.write(path.join(args.output, file_name), encoding="utf-8", short_empty_elements=False)
@@ -62,9 +58,9 @@ def parse_args():
                         help="Start date of the nfo file(s) (default: %(default)s)")
     parser.add_argument("-m", "--mpaa", type=str, default="", metavar="<mpaa>",
                         help="Common mpaa of all the generate nfo(s)")
-    parser.add_argument("-d", "--directors", type=str, nargs="+", metavar="<director(s) name>",
+    parser.add_argument("-d", "--directors", type=str, default=[], nargs="+", metavar="<director(s) name>",
                         help="Common director(s) of all the generate nfo(s)")
-    parser.add_argument("-w", "--writers", type=str, nargs="+", metavar="<writer(s) name>",
+    parser.add_argument("-w", "--writers", type=str, default=[], nargs="+", metavar="<writer(s) name>",
                         help="Common writer(s) of all the generate nfo(s)")
     parser.add_argument("-i", "--increment", type=int, default=7, metavar="<number of day(s)>",
                         help="Number of day(s) between each episode (default: %(default)s)")
@@ -72,25 +68,34 @@ def parse_args():
                         help="Episode number of the start (inclusive) (default: %(default)s)")
     parser.add_argument("-E", "--end_episode", type=int, default=12, metavar="<end episode>",
                         help="Episode number of the end (inclusive) (default: %(default)s)")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.1")
+    parser.add_argument("-r", "--rating", type=str, default="", metavar="<rating>",
+                        help="Common rating(s) of all the generate nfo(s)")
+    parser.add_argument("-t", "--title", type=str, default="", metavar="<title>",
+                        help="Common title(s) of all the generate nfo(s)")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.2")
     return parser.parse_args()
 
 
-def generate_xml(episode_num: int, aired: date, directors: List[str], writers: List[str], mpaa: str) -> Element:
-    if writers is None:
-        writers = []
-    if directors is None:
-        directors = []
+def generate_xml(index: int, episode_num: int, aired: date, args) -> Element:
     root = Element("episodedetails")
-    SubElement(root, "title").text = ""
+    SubElement(root, "title").text = parse_template_str(template=args.title, index=index, episode_num=episode_num,
+                                                        aired=aired, args=args)
     SubElement(root, "episode").text = str(episode_num)
     SubElement(root, "aired").text = aired.strftime("%Y-%m-%d")
-    SubElement(root, "mpaa").text = mpaa
+    SubElement(root, "mpaa").text = args.mpaa
     SubElement(root, "plot").text = ""
-    SubElement(root, "director").text = "/".join(directors)
-    SubElement(root, "credits").text = "/".join(writers)
-    SubElement(root, "rating").text = ""
+    SubElement(root, "director").text = "/".join(args.directors)
+    SubElement(root, "credits").text = "/".join(args.writers)
+    SubElement(root, "rating").text = args.rating
     return root
+
+
+def parse_template_str(template: str, index: int, episode_num: int, aired: date, args) -> str:
+    result = template  # type: str
+    result = result.replace("%INDEX%", str(index))
+    result = result.replace("%EPISODE%", str(episode_num))
+    result = result.replace("%DATE%", str(aired))
+    return result
 
 
 """
