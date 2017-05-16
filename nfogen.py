@@ -39,7 +39,7 @@ def main():
         raise ValueError("Start episode number cannot be greater than end episode number")
     start_date = args.date  # type: date
     for index, episode_num in enumerate(range(args.start_episode, args.end_episode + 1)):
-        aired = start_date + timedelta(days=args.increment * index)  # type: date
+        aired = start_date + timedelta(days=args.increment * index) if start_date is not None else None  # type: date
         root = generate_xml(index=index, episode_num=episode_num, aired=aired, args=args)  # type: Element
         file_name = "{0} - s{1:02d}e{2:02d}.nfo".format(args.name, args.season, episode_num)  # type: str
         tree = ElementTree(element=root)  # type: ElementTree
