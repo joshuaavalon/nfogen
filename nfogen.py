@@ -54,7 +54,7 @@ def parse_args():
                         help="Output directory of the nfo(s) (default: current)")
     parser.add_argument("-s", "--season", type=int, default=1, metavar="<season number>",
                         help="Season number of the nfo(s) (default: %(default)s)")
-    parser.add_argument("-D", "--date", type=valid_date, default=date.today(), metavar="<start date>",
+    parser.add_argument("-D", "--date", type=valid_date, default=None, metavar="<start date>",
                         help="Start date of the nfo file(s) (default: %(default)s)")
     parser.add_argument("-m", "--mpaa", type=str, default="", metavar="<mpaa>",
                         help="Common mpaa of all the generate nfo(s)")
@@ -72,7 +72,7 @@ def parse_args():
                         help="Common rating(s) of all the generate nfo(s)")
     parser.add_argument("-t", "--title", type=str, default="", metavar="<title>",
                         help="Common title(s) of all the generate nfo(s)")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.2")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.3")
     return parser.parse_args()
 
 
@@ -81,7 +81,7 @@ def generate_xml(index: int, episode_num: int, aired: date, args) -> Element:
     SubElement(root, "title").text = parse_template_str(template=args.title, index=index, episode_num=episode_num,
                                                         aired=aired, args=args)
     SubElement(root, "episode").text = str(episode_num)
-    SubElement(root, "aired").text = aired.strftime("%Y-%m-%d")
+    SubElement(root, "aired").text = aired.strftime("%Y-%m-%d") if aired is not None else ""
     SubElement(root, "mpaa").text = args.mpaa
     SubElement(root, "plot").text = ""
     SubElement(root, "director").text = "/".join(args.directors)
@@ -94,7 +94,8 @@ def parse_template_str(template: str, index: int, episode_num: int, aired: date,
     result = template  # type: str
     result = result.replace("%INDEX%", str(index))
     result = result.replace("%EPISODE%", str(episode_num))
-    result = result.replace("%DATE%", str(aired))
+    if aired is not None:
+        result = result.replace("%DATE%", str(aired))
     return result
 
 

@@ -22,7 +22,7 @@ $ python nfogen.py <show name> [arguments]
 |-------|------------------|------------------|----------------|------------------------------------------------------|
 |`-o`   |`--output`        | output directory |`-o dir/`       | Output directory of the nfo(s) (default: current)    |
 |`-s`   |`--season`        | season number    |`-s 1`          | Season number of the nfo(s) (default: 1)             |
-|`-D`   |`--date`          | start date       |`-D 2017-01-01` | Start date of the nfo file(s) (default: today)       |
+|`-D`   |`--date`          | start date       |`-D 2017-01-01` | Start date of the nfo file(s) (default: None)        |
 |`-m`   |`--mpaa`          | mpaa             |`-m TV-14`      | Common mpaa of all the generate nfo(s)               |
 |`-d`   |`--directors`     | directors        |`-d Alex Mary`  | Common director(s) of all the generate nfo(s)        |
 |`-w`   |`--writers`       | writers          |`-w Alex Mary`  | Common writer(s) of all the generate nfo(s)          |
