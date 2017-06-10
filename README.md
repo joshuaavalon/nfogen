@@ -26,6 +26,8 @@ $ python nfogen.py <show name> [arguments]
 |`-m`   |`--mpaa`          | mpaa             |`-m TV-14`      | Common mpaa of all the generate nfo(s)               |
 |`-d`   |`--directors`     | directors        |`-d Alex Mary`  | Common director(s) of all the generate nfo(s)        |
 |`-w`   |`--writers`       | writers          |`-w Alex Mary`  | Common writer(s) of all the generate nfo(s)          |
+|`-p`   |`--producers`     | producers        |`-d Alex Mary`  | Common producer(s) of all the generate nfo(s)        |
+|`-g`   |`--guests`        | guests           |`-w Alex Mary`  | Common guest(s) of all the generate nfo(s)           |
 |`-i`   |`--increment`     | days             |`-i 7`          | Number of day(s) between each episode (default: 7)   |
 |`-S`   |`--start_episode` | start episode    |`-S 1`          | Episode number of the start (inclusive) (default: 1) |
 |`-E`   |`--end_episode`   | end episode      |`-E 12`         | Episode number of the end (inclusive) (default: 12)  |
