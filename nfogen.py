@@ -4,6 +4,7 @@ from os import path
 from xml import etree
 from xml.etree.ElementTree import Element, SubElement, ElementTree, Comment, ProcessingInstruction, _escape_cdata, \
     _escape_attrib, QName
+from typing import List
 
 """
 Only print metavar once
@@ -76,7 +77,7 @@ def parse_args():
                         help="Common rating(s) of all the generate nfo(s)")
     parser.add_argument("-t", "--title", type=str, default="", metavar="<title>",
                         help="Common title(s) of all the generate nfo(s)")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.4")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.5")
     return parser.parse_args()
 
 
@@ -96,7 +97,7 @@ def generate_xml(index: int, episode_num: int, aired: date, args) -> Element:
     return root
 
 
-def set_list_tag(element: Element, tag: str, values: list[str]) -> None:
+def set_list_tag(element: Element, tag: str, values: List[str]) -> None:
     for value in values:
         SubElement(element, tag).text = value
 
