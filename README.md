@@ -8,7 +8,7 @@
    * [Template String](#template-string)
 
 ## Overview
-Nfo Gen is a script to generate nfo file(s). It is designed to be used by plex agent [XBMCnfoTVImporter](https://github.com/gboudreau/XBMCnfoTVImporter.bundle).
+Nfo Gen is a script to generate nfo file(s). It is designed to be used by plex agent [AvalonXmlAgent.bundle](https://github.com/joshuaavalon/AvalonXmlAgent.bundle).
 
 
 

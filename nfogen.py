@@ -62,6 +62,10 @@ def parse_args():
                         help="Common director(s) of all the generate nfo(s)")
     parser.add_argument("-w", "--writers", type=str, default=[], nargs="+", metavar="<writer(s) name>",
                         help="Common writer(s) of all the generate nfo(s)")
+    parser.add_argument("-p", "--producers", type=str, default=[], nargs="+", metavar="<producer(s) name>",
+                        help="Common producer(s) of all the generate nfo(s)")
+    parser.add_argument("-g", "--guests", type=str, default=[], nargs="+", metavar="<guest(s) name>",
+                        help="Common guest(s) of all the generate nfo(s)")
     parser.add_argument("-i", "--increment", type=int, default=7, metavar="<number of day(s)>",
                         help="Number of day(s) between each episode (default: %(default)s)")
     parser.add_argument("-S", "--start_episode", type=int, default=1, metavar="<start episode>",
@@ -72,7 +76,7 @@ def parse_args():
                         help="Common rating(s) of all the generate nfo(s)")
     parser.add_argument("-t", "--title", type=str, default="", metavar="<title>",
                         help="Common title(s) of all the generate nfo(s)")
-    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.3")
+    parser.add_argument("-v", "--version", action="version", version="%(prog)s 1.0.4")
     return parser.parse_args()
 
 
@@ -84,10 +88,17 @@ def generate_xml(index: int, episode_num: int, aired: date, args) -> Element:
     SubElement(root, "aired").text = aired.strftime("%Y-%m-%d") if aired is not None else ""
     SubElement(root, "mpaa").text = args.mpaa
     SubElement(root, "plot").text = ""
-    SubElement(root, "director").text = "/".join(args.directors)
-    SubElement(root, "credits").text = "/".join(args.writers)
+    set_list_tag(root, "director", args.directors)
+    set_list_tag(root, "writer", args.writers)
+    set_list_tag(root, "producer", args.producers)
+    set_list_tag(root, "guest", args.guests)
     SubElement(root, "rating").text = args.rating
     return root
+
+
+def set_list_tag(element: Element, tag: str, values: list[str]) -> None:
+    for value in values:
+        SubElement(element, tag).text = value
 
 
 def parse_template_str(template: str, index: int, episode_num: int, aired: date, args) -> str:
