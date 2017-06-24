@@ -116,7 +116,7 @@ HACK
 """
 
 
-def _serialize_xml(write, elem, qnames, namespaces, short_empty_elements, addintend="  ", intend="", newl="\n",
+def _serialize_xml(write, elem, qnames, namespaces, short_empty_elements, addintend="    ", intend="", newl="\n",
                    **kwargs):
     tag = elem.tag
     text = elem.text
