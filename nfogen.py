@@ -42,7 +42,7 @@ def main():
     for index, episode_num in enumerate(range(args.start_episode, args.end_episode + 1)):
         aired = start_date + timedelta(days=args.increment * index) if start_date is not None else None  # type: date
         root = generate_xml(index=index, episode_num=episode_num, aired=aired, args=args)  # type: Element
-        file_name = "{0} - s{1:02d}e{2:02d}.nfo".format(args.name, args.season, episode_num)  # type: str
+        file_name = "{0} - s{1:02d}e{2:02d}.xml".format(args.name, args.season, episode_num)  # type: str
         tree = ElementTree(element=root)  # type: ElementTree
         tree.write(path.join(args.output, file_name), encoding="utf-8", short_empty_elements=False)
 
@@ -104,7 +104,7 @@ def set_list_tag(element: Element, tag: str, values: List[str]) -> None:
 
 def parse_template_str(template: str, index: int, episode_num: int, aired: date, args) -> str:
     result = template  # type: str
-    result = result.replace("%INDEX%", str(index))
+    result = result.replace("%INDEX%", str(index+1))
     result = result.replace("%EPISODE%", str(episode_num))
     if aired is not None:
         result = result.replace("%DATE%", aired.strftime("%Y-%m-%d"))
