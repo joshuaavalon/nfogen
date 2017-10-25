@@ -2,6 +2,8 @@
 [![Release](https://img.shields.io/github/release/joshuaavalon/nfogen.svg?style=flat-square&colorB=brightgreen)](https://github.com/joshuaavalon/nfogen/releases)
 [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/joshuaavalon/nfogen/blob/master/LICENSE)
 
+**THIS IS NO LONGER BEING MAINTENANCE. SEE THE [REWRITTEN VERSION](https://github.com/joshuaavalon/AvalonXmlTools).**
+
 * [Overview](#overview)
 * [Usage](#usage)
 * [Arguments](#arguments)
